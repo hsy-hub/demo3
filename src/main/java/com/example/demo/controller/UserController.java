@@ -6,21 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
     @Autowired
     UserService userService;
-
+    @Autowired
+    HttpServletRequest request;
 
     @RequestMapping("/login")
     @ResponseBody
     public String login(User user) {
-
+        HttpSession session = request.getSession();
         User loginUser = userService.login(user);
         if (loginUser != null){
+            session.setAttribute("user",loginUser);
             return "success";
-        }else{
+        } else{
             return "false";
         }
 
